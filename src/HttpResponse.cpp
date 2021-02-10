@@ -42,8 +42,7 @@ const std::map<std::string, std::string> HttpResponse::suffix_to_type = {
     {".css", "text/css"}
 };
 
-Buffer HttpResponse::makeResponse()
-{
+Buffer HttpResponse::makeResponse(){
     Buffer output;
 
     if(m_statuscode == 400) {
@@ -70,8 +69,7 @@ Buffer HttpResponse::makeResponse()
 }
 
 
-void HttpResponse::doStaticRequest(Buffer& output, long file_size)
-{
+void HttpResponse::doStaticRequest(Buffer& output, long file_size){
     assert(file_size >= 0);
 
     auto itr = statuscode_to_message.find(m_statuscode);
@@ -114,8 +112,7 @@ void HttpResponse::doStaticRequest(Buffer& output, long file_size)
     munmap(src_addr, file_size);
 }
 
-std::string HttpResponse::__getFileType()
-{
+std::string HttpResponse::__getFileType(){
     int idx = m_path.find_last_of('.');
     std::string suffix;
     // can`t find file suffix
@@ -132,8 +129,7 @@ std::string HttpResponse::__getFileType()
     return itr->second;
 }
 
-void HttpResponse::doErrorResponse(Buffer& output, std::string message) 
-{
+void HttpResponse::doErrorResponse(Buffer& output, std::string message) {
     std::string body;
 
     auto itr = statuscode_to_message.find(m_statuscode);

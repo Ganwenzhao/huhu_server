@@ -6,8 +6,7 @@
 using namespace huhu;
 
 ThreadPool::ThreadPool(int workers)
-    : m_shutdown(false)
-{
+    : m_shutdown(false){
     workers = workers <= 0 ? 1 : workers;
     for(int i = 0; i < workers; ++i)
     //lambda expr

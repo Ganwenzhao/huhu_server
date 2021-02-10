@@ -70,7 +70,7 @@ void HttpServer::__acceptConnection()
         HttpRequest* request = new HttpRequest(accept_fd);
         m_timer_manager->addTimer(request, CONNECT_TIMEOUT, std::bind(&HttpServer::__closeConnection, this, request));
         //EPOLLIN, edge trigger, oneshot
-        m_epoll->addFd(accept_fd, request, (EPOLLIN | EPOLLONESHOT));
+        m_epoll->addFd(accept_fd, request, (EPOLLIN | EPOLLET | EPOLLONESHOT));
     }
 }
 

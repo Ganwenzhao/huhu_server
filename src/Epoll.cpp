@@ -12,18 +12,15 @@ using namespace huhu;
 
 Epoll::Epoll() 
     : m_epoll_fd(::epoll_create1(EPOLL_CLOEXEC)),
-      m_eventlist(MAXEVENTS)
-{
+      m_eventlist(MAXEVENTS){
     assert(m_epoll_fd >= 0);
 }
 
-Epoll::~Epoll()
-{
+Epoll::~Epoll(){
     ::close(m_epoll_fd);
 }
 
-int Epoll::addFd(int fd, HttpRequest* request, int events)
-{
+int Epoll::addFd(int fd, HttpRequest* request, int events){
     struct epoll_event event;
     event.data.ptr = static_cast<void*>(request); 
     event.events = events;
@@ -31,8 +28,7 @@ int Epoll::addFd(int fd, HttpRequest* request, int events)
     return ret;
 }
 
-int Epoll::modFd(int fd, HttpRequest* request, int events)
-{
+int Epoll::modFd(int fd, HttpRequest* request, int events){
     struct epoll_event event;
     event.data.ptr = static_cast<void*>(request); 
     event.events = events;
@@ -40,8 +36,7 @@ int Epoll::modFd(int fd, HttpRequest* request, int events)
     return ret;
 }
 
-int Epoll::delFd(int fd, HttpRequest* request, int events)
-{
+int Epoll::delFd(int fd, HttpRequest* request, int events){
     struct epoll_event event;
     event.data.ptr = static_cast<void*>(request);
     event.events = events;
@@ -49,8 +44,7 @@ int Epoll::delFd(int fd, HttpRequest* request, int events)
     return ret;
 }
 
-int Epoll::waitEvents(int time_ms)
-{
+int Epoll::waitEvents(int time_ms){
     int events_num = ::epoll_wait(m_epoll_fd, &*m_eventlist.begin(), \
     static_cast<int>(m_eventlist.size()), time_ms);
     if(events_num == 0) {
@@ -62,8 +56,7 @@ int Epoll::waitEvents(int time_ms)
     return events_num;
 }
 
-void Epoll::handleEvent(int listen_fd, std::shared_ptr<ThreadPool>& thread_pool, int events_num)
-{
+void Epoll::handleEvent(int listen_fd, std::shared_ptr<ThreadPool>& thread_pool, int events_num){
     assert(events_num > 0);
     for(int i = 0; i < events_num; ++i) {
         HttpRequest* request = static_cast<HttpRequest*>(m_eventlist[i].data.ptr); 

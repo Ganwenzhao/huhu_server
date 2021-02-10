@@ -13,24 +13,20 @@ HttpRequest::HttpRequest(int fd)
       m_timer(nullptr),
       m_status(ExpectRequestLine),
       m_method(Invalid),
-      m_version(Unknown)
-{
+      m_version(Unknown){
     assert(m_fd >= 0);
 }
 
-HttpRequest::~HttpRequest()
-{
+HttpRequest::~HttpRequest(){
     ::close(m_fd);
 }
 
-int HttpRequest::readData(int* savedErrno)
-{
+int HttpRequest::readData(int* savedErrno){
     int ret = m_in_buffer.readFd(m_fd, savedErrno);
     return ret;
 }
 
-int HttpRequest::writeData(int* savedErrno)
-{
+int HttpRequest::writeData(int* savedErrno){
     int ret = m_out_buffer.writeFd(m_fd, savedErrno);
     return ret;
 }
@@ -64,8 +60,7 @@ bool HttpRequest::isWorking() const{
 }
 
 
-bool HttpRequest::parseRequest()
-{
+bool HttpRequest::parseRequest(){
     bool ok = true;
     bool hasMore = true;
 
@@ -111,8 +106,7 @@ bool HttpRequest::parseFinish(){
     return m_status == GotAll;
 }
 
-void HttpRequest::resetParseStatus()
-{
+void HttpRequest::resetParseStatus(){
     m_status = ExpectRequestLine; 
     m_method = Invalid; 
     m_version = Unknown; 
@@ -129,8 +123,7 @@ std::string HttpRequest::getQuery() const{
     return m_query;
 }
 
-std::string HttpRequest::getHeader(const std::string& field) const
-{
+std::string HttpRequest::getHeader(const std::string& field) const{
     std::string res;
     auto itr = m_header.find(field);
     if(itr != m_header.end())
@@ -138,8 +131,7 @@ std::string HttpRequest::getHeader(const std::string& field) const
     return res;
 }
 
-std::string HttpRequest::getMethod() const
-{
+std::string HttpRequest::getMethod() const{
     std::string res;
     if(m_method == Get)
         res = "GET";
@@ -155,8 +147,7 @@ std::string HttpRequest::getMethod() const
     return res;
 }
 
-bool HttpRequest::keepAlive() const
-{
+bool HttpRequest::keepAlive() const{
     std::string connection = getHeader("Connection");
     bool res = connection == "Keep-Alive" || 
                (m_version == HTTP11 && connection != "close");
@@ -164,8 +155,7 @@ bool HttpRequest::keepAlive() const
     return res;
 }
 
-bool HttpRequest::__parseRequestLine(const char* begin, const char* end)
-{
+bool HttpRequest::__parseRequestLine(const char* begin, const char* end){
     bool succeed = false;
     const char* start = begin;
     const char* space = std::find(start, end, ' ');
@@ -196,8 +186,7 @@ bool HttpRequest::__parseRequestLine(const char* begin, const char* end)
     return succeed;
 }
 
-bool HttpRequest::__setMethod(const char* start, const char* end)
-{
+bool HttpRequest::__setMethod(const char* start, const char* end){
     std::string m(start, end);
     if(m == "GET")
         m_method = Get;
@@ -230,8 +219,7 @@ void HttpRequest::__setVersion(HttpVersion version){
     m_version = version;
 }
 
-void HttpRequest::__addHeader(const char* begin, const char* colon, const char* end)
-{
+void HttpRequest::__addHeader(const char* begin, const char* colon, const char* end){
     std::string field(begin, colon);
     ++colon;
     while(colon < end && *colon == ' ')

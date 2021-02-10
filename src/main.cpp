@@ -1,7 +1,6 @@
 #include "../include/HttpServer.h"
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
 	int port = 6666;
 	if(argc >= 2) {
 		port = atoi(argv[1]);

@@ -8,8 +8,7 @@ using namespace huhu;
 
 void TimerManager::addTimer(HttpRequest* request, 
                      const int& timeout, 
-                     const TimeoutCallBack& cb)
-{
+                     const TimeoutCallBack& cb){
     std::unique_lock<std::mutex> lock(m_lock);
     assert(request != nullptr);
 
@@ -25,8 +24,7 @@ void TimerManager::addTimer(HttpRequest* request,
 }
 
 //handleExpireTimers->runCallBack->__closeConnection->delTimer
-void TimerManager::delTimer(HttpRequest* request)
-{
+void TimerManager::delTimer(HttpRequest* request){
     assert(request != nullptr);
 
     Timer* timer = request->getTimer();
@@ -38,8 +36,7 @@ void TimerManager::delTimer(HttpRequest* request)
     request->setTimer(nullptr);
 }
 
-void TimerManager::handleExpireTimer()
-{
+void TimerManager::handleExpireTimer(){
     std::unique_lock<std::mutex> lock(m_lock);
     updateTime();
     while(!m_timer_queue.empty()) {
@@ -67,8 +64,7 @@ void TimerManager::handleExpireTimer()
     }
 }
 
-int TimerManager::getNextExpireTime()
-{
+int TimerManager::getNextExpireTime(){
     std::unique_lock<std::mutex> lock(m_lock);
     updateTime();
     int res = -1;

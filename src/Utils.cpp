@@ -11,8 +11,7 @@
 
 using namespace huhu;
 
-int utils::createListenFd(int port)
-{
+int utils::createListenFd(int port){
     // check port
     port = ((port <= 1024) || (port >= 65535)) ? 8888 : port;
 
@@ -54,8 +53,7 @@ int utils::createListenFd(int port)
     return listen_fd;
 }
 
-int utils::setNonBlocking(int fd)
-{
+int utils::setNonBlocking(int fd){
     // getfl
     int flag = ::fcntl(fd, F_GETFL, 0);
     if(flag == -1) {
