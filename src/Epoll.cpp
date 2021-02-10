@@ -22,7 +22,7 @@ Epoll::~Epoll(){
 
 int Epoll::addFd(int fd, HttpRequest* request, int events){
     struct epoll_event event;
-    event.data.ptr = static_cast<void*>(request); 
+    event.data.ptr = (void*)(request); 
     event.events = events;
     int ret = ::epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, fd, &event);
     return ret;
@@ -30,7 +30,7 @@ int Epoll::addFd(int fd, HttpRequest* request, int events){
 
 int Epoll::modFd(int fd, HttpRequest* request, int events){
     struct epoll_event event;
-    event.data.ptr = static_cast<void*>(request); 
+    event.data.ptr = (void*)(request); 
     event.events = events;
     int ret = ::epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, fd, &event);
     return ret;
@@ -38,7 +38,7 @@ int Epoll::modFd(int fd, HttpRequest* request, int events){
 
 int Epoll::delFd(int fd, HttpRequest* request, int events){
     struct epoll_event event;
-    event.data.ptr = static_cast<void*>(request);
+    event.data.ptr = (void*)(request);
     event.events = events;
     int ret = ::epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, fd, &event);
     return ret;
@@ -59,7 +59,7 @@ int Epoll::waitEvents(int time_ms){
 void Epoll::handleEvent(int listen_fd, std::shared_ptr<ThreadPool>& thread_pool, int events_num){
     assert(events_num > 0);
     for(int i = 0; i < events_num; ++i) {
-        HttpRequest* request = static_cast<HttpRequest*>(m_eventlist[i].data.ptr); 
+        HttpRequest* request = (HttpRequest*)(m_eventlist[i].data.ptr); 
         int fd = request->fd();
 
         if(fd == listen_fd) {

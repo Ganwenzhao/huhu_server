@@ -45,7 +45,6 @@ public:
     const char* findCRLF() const;
     const char* findCRLF(const char* start) const;
 
-
 private:
     char* __begin();
     const char* __begin() const;
