@@ -23,15 +23,13 @@ HttpServer::HttpServer(int port, int thread_num)
       m_listen_request(new HttpRequest(m_listen_fd)),
       m_epoll(new Epoll()),
       m_threadpool(new ThreadPool(thread_num)),
-      m_timer_manager(new TimerManager())
-{
+      m_timer_manager(new TimerManager()){
     assert(m_listen_fd >= 0);
 }
 
 HttpServer::~HttpServer(){}
 
-void HttpServer::runHuHu()
-{
+void HttpServer::runHuHu(){
     m_epoll->addFd(m_listen_fd, m_listen_request.get(), (EPOLLIN | EPOLLET));
     m_epoll->setNewConnection(std::bind(&HttpServer::__acceptConnection, this));
     m_epoll->setCloseConnection(std::bind(&HttpServer::__closeConnection, this, \
@@ -56,9 +54,8 @@ void HttpServer::runHuHu()
     }
 }
 
-// ET
-void HttpServer::__acceptConnection()
-{
+// ET acceptConn, LT IO
+void HttpServer::__acceptConnection(){
     while(1) {
         int accept_fd = ::accept4(m_listen_fd, nullptr, nullptr, SOCK_NONBLOCK | SOCK_CLOEXEC);
         if(accept_fd == -1) {
@@ -69,13 +66,12 @@ void HttpServer::__acceptConnection()
         }
         HttpRequest* request = new HttpRequest(accept_fd);
         m_timer_manager->addTimer(request, CONNECT_TIMEOUT, std::bind(&HttpServer::__closeConnection, this, request));
-        //EPOLLIN, edge trigger, oneshot
-        m_epoll->addFd(accept_fd, request, (EPOLLIN | EPOLLET | EPOLLONESHOT));
+        //EPOLLIN, level trigger, oneshot
+        m_epoll->addFd(accept_fd, request, (EPOLLIN | EPOLLONESHOT));
     }
 }
 
-void HttpServer::__closeConnection(HttpRequest* request)
-{
+void HttpServer::__closeConnection(HttpRequest* request){
     int fd = request->fd();
     if(request->isWorking()) {
         return;
@@ -89,8 +85,7 @@ void HttpServer::__closeConnection(HttpRequest* request)
 }
 
 // LT
-void HttpServer::__doRequest(HttpRequest* request)
-{
+void HttpServer::__doRequest(HttpRequest* request){
     m_timer_manager->delTimer(request);
     assert(request != nullptr);
     int fd = request->fd();
@@ -143,8 +138,7 @@ void HttpServer::__doRequest(HttpRequest* request)
 }
 
 // LT
-void HttpServer::__doResponse(HttpRequest* request)
-{
+void HttpServer::__doResponse(HttpRequest* request){
     m_timer_manager->delTimer(request);
     assert(request != nullptr);
     int fd = request->fd();

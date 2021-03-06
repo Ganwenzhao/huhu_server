@@ -37,7 +37,6 @@ void TimerManager::delTimer(HttpRequest* request){
 }
 
 void TimerManager::handleExpireTimer(){
-    std::unique_lock<std::mutex> lock(m_lock);
     updateTime();
     while(!m_timer_queue.empty()) {
         Timer* timer = m_timer_queue.top();
@@ -57,15 +56,12 @@ void TimerManager::handleExpireTimer(){
         }
         // timeout
         timer->runCallBack();
-        m_timer_queue.pop();
-        if(timer != nullptr){
-            delete timer;
-        }
+        
     }
 }
 
 int TimerManager::getNextExpireTime(){
-    std::unique_lock<std::mutex> lock(m_lock);
+    //std::unique_lock<std::mutex> lock(m_lock);
     updateTime();
     int res = -1;
     while(!m_timer_queue.empty()) {
@@ -74,6 +70,7 @@ int TimerManager::getNextExpireTime(){
             m_timer_queue.pop();
             if(timer != nullptr){
                 delete timer;
+                timer = nullptr;
             }
             continue;
         }
