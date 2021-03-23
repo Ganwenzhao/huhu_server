@@ -31,8 +31,7 @@ ThreadPool::ThreadPool(int workers)
         });
 }
 
-ThreadPool::~ThreadPool()
-{
+ThreadPool::~ThreadPool(){
     {
         std::unique_lock<std::mutex> lock(m_lock);
         m_shutdown = true;
@@ -43,8 +42,7 @@ ThreadPool::~ThreadPool()
         thread.join();
 }
 
-void ThreadPool::addTask(const TaskFunc& task)
-{
+void ThreadPool::addTask(const TaskFunc& task){
     {
         std::unique_lock<std::mutex> lock(m_lock);
         m_tasks.push(task);

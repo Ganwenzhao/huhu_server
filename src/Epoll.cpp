@@ -56,7 +56,7 @@ int Epoll::waitEvents(int time_ms){
     return events_num;
 }
 
-void Epoll::handleEvent(int listen_fd, std::shared_ptr<ThreadPool>& thread_pool, int events_num){
+void Epoll::handleEvent(int listen_fd, std::unique_ptr<ThreadPool>& thread_pool, int events_num){
     assert(events_num > 0);
     for(int i = 0; i < events_num; ++i) {
         HttpRequest* request = (HttpRequest*)(m_eventlist[i].data.ptr); 
