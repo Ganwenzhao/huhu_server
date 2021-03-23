@@ -29,7 +29,7 @@ public:
     //epoll_wait
     int waitEvents(int time_ms);
 
-    void handleEvent(int listen_fd, std::shared_ptr<ThreadPool>& thread_pool, int events_num);
+    void handleEvent(int listen_fd, std::unique_ptr<ThreadPool>& thread_pool, int events_num);
 
     void setNewConnection(const NewConnectionCallback& cb){
         m_new_conn_cb = cb;

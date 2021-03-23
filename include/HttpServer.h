@@ -30,7 +30,7 @@ private:
 private:
     using ListenRequestPtr = std::unique_ptr<HttpRequest>;
     using EpollPtr = std::unique_ptr<Epoll>;
-    using ThreadPoolPtr = std::shared_ptr<ThreadPool>;
+    using ThreadPoolPtr = std::unique_ptr<ThreadPool>;
     using TimerManagerPtr = std::unique_ptr<TimerManager>;
 
     int m_port;
