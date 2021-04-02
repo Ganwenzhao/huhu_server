@@ -3,7 +3,7 @@
 
 #include <map>
 #include <string>
-
+#include <mutex>
 #define CONNECT_TIMEOUT  500
 
 namespace huhu{

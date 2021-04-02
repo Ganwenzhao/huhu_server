@@ -35,6 +35,7 @@ private:
 
     int m_port;
     int m_listen_fd;
+    std::mutex m_mtx;
     ListenRequestPtr m_listen_request;
     EpollPtr m_epoll;
     ThreadPoolPtr m_threadpool;
