@@ -72,6 +72,7 @@ void HttpServer::__acceptConnection(){
 }
 
 void HttpServer::__closeConnection(HttpRequest* request){
+    std::unique_lock<std::mutex> lock(m_mtx);
     int fd = request->fd();
     if(request->isWorking()) {
         return;
@@ -86,6 +87,7 @@ void HttpServer::__closeConnection(HttpRequest* request){
 
 // LT
 void HttpServer::__doRequest(HttpRequest* request){
+
     m_timer_manager->delTimer(request);
     assert(request != nullptr);
     int fd = request->fd();
@@ -139,6 +141,7 @@ void HttpServer::__doRequest(HttpRequest* request){
 
 // LT
 void HttpServer::__doResponse(HttpRequest* request){
+
     m_timer_manager->delTimer(request);
     assert(request != nullptr);
     int fd = request->fd();

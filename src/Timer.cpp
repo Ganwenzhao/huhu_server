@@ -27,12 +27,14 @@ void TimerManager::addTimer(HttpRequest* request,
 void TimerManager::delTimer(HttpRequest* request){
     assert(request != nullptr);
 
+    //std::unique_lock<std::mutex> lock(m_lock);
+
     Timer* timer = request->getTimer();
     if(timer == nullptr)
         return;
     //lazy delete
     timer->del();
-
+    
     request->setTimer(nullptr);
 }
 
