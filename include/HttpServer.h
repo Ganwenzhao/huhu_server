@@ -5,7 +5,7 @@
 #include <mutex>
 
 #define EPOLL_TIMEOUT_MS  -1//epoll_wait timeout
-#define CONNECT_TIMEOUT  500
+#define CONNECT_TIMEOUT  1500
 #define WORKERS_NUM  4
 
 namespace huhu{

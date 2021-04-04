@@ -98,7 +98,7 @@ void HttpResponse::doStaticRequest(Buffer& output, long file_size){
     int src_fd = ::open(m_path.data(), O_RDONLY, 0);
     //mmap
     void* mem = ::mmap(NULL, file_size, PROT_READ, MAP_PRIVATE, src_fd, 0);
-    ::close(src_fd);
+    //::close(src_fd);
     if(mem == (void*) -1) {
         munmap(mem, file_size);
         output.retrieveAll();
@@ -110,6 +110,7 @@ void HttpResponse::doStaticRequest(Buffer& output, long file_size){
     output.append(src_addr, file_size);
     //cancel mmap
     munmap(src_addr, file_size);
+    close(src_fd);
 }
 
 std::string HttpResponse::__getFileType(){

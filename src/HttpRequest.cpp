@@ -207,7 +207,7 @@ bool HttpRequest::__setMethod(const char* start, const char* end){
 void HttpRequest::__setPath(const char* begin, const char* end){
     std::string sub_path;
     sub_path.assign(begin, end);
-    if(sub_path == "/") sub_path = "/1m.pdf";
+    if(sub_path == "/") sub_path = "/test.html";
     m_path = STATIC_ROOT + sub_path;
 }
 

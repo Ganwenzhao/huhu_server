@@ -63,8 +63,7 @@ void TimerManager::handleExpireTimer(){
 }
 
 int TimerManager::getNextExpireTime(){
-    //std::unique_lock<std::mutex> lock(m_lock);
-    updateTime();
+    updateTime();   
     int res = -1;
     while(!m_timer_queue.empty()) {
         Timer* timer = m_timer_queue.top();
